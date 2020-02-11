@@ -9,8 +9,8 @@ import random
 
 train_file = 'new_train_list.txt'
 # test_file = '3200_test_list.txt'
-img_path = '/data/VehicleID_V1.0/image'
-# img_path = '/media/lx/新加卷/datasets/VehicleID/image'
+# img_path = '/data/VehicleID_V1.0/image'
+img_path = '/media/lx/新加卷/datasets/VehicleID/image'
 width = 240
 height = 240
 # img_mean = [0.485, 0.456, 0.406]
@@ -20,7 +20,8 @@ img_std = [0.2262, 0.2269, 0.2279]
 epoch = 100
 alpha = 0.4
 
-dataset = random.shuffle(train_dataset(train_file, img_path))
+dataset = train_dataset(train_file, img_path)
+random.shuffle(dataset)
 trainset = dataset[:76800]
 testset = dataset[76800:]
 # testset = train_dataset(test_file, img_path)
