@@ -1,6 +1,6 @@
 from model import EmbeddingNet
 from dataset_loader import ImageDataset, train_dataset
-from transform import Transform
+from transform import Transform, calculate_mean_and_std
 import torch
 from torch.utils.data import DataLoader
 import torch.nn as nn
@@ -25,7 +25,10 @@ trainLoader = DataLoader(ImageDataset(trainset, transform=trans),
                          batch_size=128,
                          shuffle=True,
                          num_workers=16,
-                         pin_memory=True)
+                         pin_memory=False)
+mean, std = calculate_mean_and_std(trainLoader, len(trainset))
+print('mean and std:', mean, std)
+
 # testLoader = DataLoader(ImageDataset(testset, transform=trans),
 #                         batch_size=128,
 #                         num_workers=16,
@@ -37,7 +40,7 @@ net = nn.DataParallel(net).cuda()
 net.train()
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(net.parameters(), lr=0.001)
-scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[10, 40,  70])
+scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[30, 60, 90])
 
 for e in range(epoch):
     scheduler.step(e)

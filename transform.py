@@ -23,4 +23,15 @@ class Transform(object):
         y = int((self.height-h)/2)
         resized_img[:, y:y+h, x:x+w] = img
 
-        return F.normalize(resized_img, self.mean, self.std, inplace=True)
+        # return F.normalize(resized_img, self.mean, self.std, inplace=True)
+        return resized_img
+
+
+def calculate_mean_and_std(dataset_loader, dataset_size):
+    mean = torch.zeros(3)
+    std = torch.zeros(3)
+    for data in dataset_loader:
+        now_batch_size, c, h, w = data[0].shape
+        mean += torch.sum(torch.mean(torch.mean(data[0], dim=3), dim=2), dim=0)
+        std += torch.sum(torch.std(data[0].view(now_batch_size, c, h * w), dim=2), dim=0)
+    return mean/dataset_size, std/dataset_size
