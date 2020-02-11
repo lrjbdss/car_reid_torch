@@ -68,7 +68,7 @@ for e in range(epoch):
         #         models_correct += (models_pred == models).sum()
         #     print('color正确率：%3f, model正确率：%3f' % (colors_correct/3200, models_correct/3200))
     if e % 10 == 9:
-        savePath = './weights/%depoch.pth'
+        savePath = './weights/%depoch.pth' % e
         torch.save(net.state_dict(), savePath)
 
 print('Finished Training')
