@@ -15,7 +15,7 @@ width = 240
 height = 240
 img_mean = [0.485, 0.456, 0.406]
 img_std = [0.229, 0.224, 0.225]
-epoch = 10
+epoch = 100
 alpha = 0.4
 
 trainset = train_dataset(train_file, img_path)
@@ -67,7 +67,8 @@ for e in range(epoch):
         #         colors_correct += (colors_pred == colors).sum()
         #         models_correct += (models_pred == models).sum()
         #     print('color正确率：%3f, model正确率：%3f' % (colors_correct/3200, models_correct/3200))
-    savePath = './weights/%depoch.pth'
-    torch.save(net.state_dict(), savePath)
+    if e % 10 == 9:
+        savePath = './weights/%depoch.pth'
+        torch.save(net.state_dict(), savePath)
 
 print('Finished Training')
