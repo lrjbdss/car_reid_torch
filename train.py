@@ -10,6 +10,7 @@ from torch.autograd import Variable
 train_file = 'new_train_list.txt'
 # test_file = '3200_test_list.txt'
 img_path = '/data/VehicleID_V1.0/image'
+# img_path = '/media/lx/新加卷/datasets/VehicleID/image'
 width = 240
 height = 240
 img_mean = [0.485, 0.456, 0.406]
@@ -43,10 +44,7 @@ for e in range(epoch):
         imgs, colors, models = [p.cuda() for p in data]
 
         colors_pred, models_pred = net(imgs)
-        # colors_target = torch.zeros(colors_pred.size()).cuda().scatter_(1, colors.unsqueeze(1), 1).long()
-        # models_target = torch.zeros(models_pred.size()).cuda().scatter_(1, models.unsqueeze(1), 1).long()
         loss = alpha * criterion(colors_pred, colors) + (1 - alpha) * criterion(models_pred, models)
-        # loss = criterion(colors_pred, colors)
         loss.backward()
         optimizer.step()
         print('第%d个epoch,第%d个batch' % (e, i))
@@ -65,5 +63,7 @@ for e in range(epoch):
         #         colors_correct += (colors_pred == colors).sum()
         #         models_correct += (models_pred == models).sum()
         #     print('color正确率：%3f, model正确率：%3f' % (colors_correct/3200, models_correct/3200))
+    savePath = './weights/%depoch.pth'
+    torch.save(net.stat_dict(), savePath)
 
 print('Finished Training')
