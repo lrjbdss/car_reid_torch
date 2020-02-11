@@ -36,18 +36,22 @@ net = EmbeddingNet()
 net = nn.DataParallel(net).cuda()
 net.train()
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(net.parameters())
+optimizer = optim.Adam(net.parameters(), lr=0.001)
+scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[10, 40,  70])
 
 for e in range(epoch):
+    scheduler.step(e)
     running_loss = 0.
     for i, data in enumerate(trainLoader):
         imgs, colors, models = [p.cuda() for p in data]
 
         colors_pred, models_pred = net(imgs)
         loss = alpha * criterion(colors_pred, colors) + (1 - alpha) * criterion(models_pred, models)
+        optimizer.zero_grad()
         loss.backward()
         optimizer.step()
         print('第%d个epoch,第%d个batch' % (e, i))
+
         running_loss += loss.data
         if i % 200 == 199:
             print('[%d, %5d] loss: %.3f' %
@@ -64,6 +68,6 @@ for e in range(epoch):
         #         models_correct += (models_pred == models).sum()
         #     print('color正确率：%3f, model正确率：%3f' % (colors_correct/3200, models_correct/3200))
     savePath = './weights/%depoch.pth'
-    torch.save(net.stat_dict(), savePath)
+    torch.save(net.state_dict(), savePath)
 
 print('Finished Training')
