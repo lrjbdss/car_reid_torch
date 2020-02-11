@@ -23,8 +23,8 @@ class Transform(object):
         y = int((self.height-h)/2)
         resized_img[:, y:y+h, x:x+w] = img
 
-        # return F.normalize(resized_img, self.mean, self.std, inplace=True)
-        return resized_img
+        return F.normalize(resized_img, self.mean, self.std, inplace=True)
+        # return resized_img
 
 
 def calculate_mean_and_std(dataset_loader, dataset_size):
