@@ -9,8 +9,8 @@ import random
 
 train_file = 'new_train_list.txt'
 # test_file = '3200_test_list.txt'
-# img_path = '/data/VehicleID_V1.0/image'
-img_path = '/media/lx/新加卷/datasets/VehicleID/image'
+img_path = '/data/VehicleID_V1.0/image'
+# img_path = '/media/lx/新加卷/datasets/VehicleID/image'
 width = 240
 height = 240
 # img_mean = [0.485, 0.456, 0.406]
