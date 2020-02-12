@@ -102,18 +102,16 @@ class ResNet(nn.Module):
 
 
 def resnet18(pretrained=False, **kwargs):
-    resnet18 = models.resnet18(pretrained=True)
     model = ResNet(BasicBlock, [2, 2, 2, 2], **kwargs)
+    if pretrained:
+        resnet18 = models.resnet18(pretrained=True)
+        pretrained_dict = resnet18.state_dict()
+        model_dict = model.state_dict()
 
-    pretrained_dict = resnet18.state_dict()
-    model_dict = model.state_dict()
+        pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
+        model_dict.update(pretrained_dict)
+        model.load_state_dict(model_dict)
 
-    pretrained_dict = {k: v for k, v in pretrained_dict.items() if k in model_dict}
-    model_dict.update(pretrained_dict)
-    model.load_state_dict(model_dict)
-
-    for param in model.parameters():
-        param.requires_grad = True
     # for param in model.fc_color.parameters():
     #     param.requires_grad = True
     # for param in model.fc_model.parameters():
